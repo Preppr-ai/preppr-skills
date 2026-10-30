@@ -2,7 +2,7 @@
 name: preparedness-alert-warning-templates
 description: Guides an emergency manager, step by step, through pre-scripting a library of compliant public alert and warning templates (IPAWS/WEA 90- and 360-character, mass notification SMS/email/voice, X/Twitter and other social media) for Imminent Threat, Public Safety, AMBER, Missing Person and Developing Situation alerts, using the research-backed Warning Lexicon and a confidence-scored compliance check. Use when the user asks to "write a WEA template", "pre-script an emergency alert", "draft an IPAWS message", "create an AMBER alert template", "write a boil water advisory alert", "draft a public warning", "build an alert library", "turn this incident text into alert messages", or wants follow-up UPDATE / THREAT HAS PASSED messages for an existing alert. Runs the Preppr Action protocol v1.004 (CC BY-SA 4.0) from Phase 1 Step 1.1 and pauses for user input at every pause point.
 license: CC-BY-SA-4.0
-compatibility: Works in Claude.ai, Claude Code and the Claude API with no network access or tools beyond file reading; use a long-context reasoning model (200k tokens) because the protocol itself is about 170 KB.
+compatibility: Agent Skills open format. Works in Claude.ai, Claude Code and the Claude API, GitHub Copilot (CLI and VS Code), Gemini CLI, and OpenAI Codex and the ChatGPT desktop app, with no network access or tools beyond file reading; use a long-context reasoning model (200k tokens) because the protocol itself is about 170 KB.
 metadata:
   author: Preparedness Innovations, Inc (dba Preppr.ai)
   version: "1.004"

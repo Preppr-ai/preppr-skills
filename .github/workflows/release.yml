@@ -1,0 +1,40 @@
+name: Release skill zips
+
+# Pushing a tag like v1.004 builds one zip per skill folder (SKILL.md at the
+# top level, ready for Claude.ai "Upload skill") and attaches them to a
+# GitHub Release for that tag.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate SKILL.md frontmatter and protocol JSON
+        run: |
+          set -e
+          for d in skills/*/; do
+            name=$(basename "$d")
+            test -f "$d/SKILL.md"
+            grep -q "^name: $name$" "$d/SKILL.md"
+            if [ -f "$d/references/protocol.json" ]; then
+              python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$d/references/protocol.json"
+            fi
+          done
+      - name: Build zips
+        run: |
+          mkdir -p dist
+          for d in skills/*/; do
+            name=$(basename "$d")
+            (cd skills && zip -qr "../dist/$name-${GITHUB_REF_NAME}.zip" "$name")
+          done
+          ls -la dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          generate_release_notes: true

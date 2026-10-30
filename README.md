@@ -2,8 +2,10 @@
 
 Open, portable AI skills from [Preppr](https://www.preppr.ai) for emergency
 management. Each skill is a folder of instructions that teaches an AI
-assistant how to run one of Preppr's guided workflows, step by step. They work
-in Claude, ChatGPT and GitHub Copilot, and they need no Preppr account.
+assistant how to run one of Preppr's guided workflows, step by step. They use
+the [Agent Skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview)
+open format, so the same folder works in **Claude**, **GitHub Copilot**,
+**Gemini** and **ChatGPT / Codex**. No Preppr account is needed.
 
 The first skill, **Preparedness Alert & Warning Templates**, lets an emergency
 manager pre-script a library of compliant public alert templates for IPAWS and
@@ -21,60 +23,90 @@ before anything is generated.
 
 Each skill folder contains:
 
-- `SKILL.md` - the skill in the [Agent Skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) open format (YAML frontmatter plus instructions)
+- `SKILL.md` - the skill (YAML frontmatter plus instructions); this is what every tool reads
 - `references/protocol.json` - the full protocol the assistant follows
 - `references/attribution.md` - license, third-party citations and version notes
-- `chatgpt/custom-gpt-instructions.md` - instructions for a ChatGPT Custom GPT
-- `copilot/*.agent.md` - a GitHub Copilot custom agent
+- `agents/openai.yaml` - optional display metadata for Codex and ChatGPT
+- `chatgpt/custom-gpt-instructions.md` - for a ChatGPT Custom GPT (no Codex needed)
+- `gemini/gem-instructions.md` - for a Gemini Gem in the Gemini app
+- `copilot/*.agent.md` - a GitHub Copilot custom agent, for people who prefer agents to skills
+
+## Where each tool looks for skills
+
+| Tool | Your user profile | This project only | Invoke |
+| --- | --- | --- | --- |
+| Claude Code | `~/.claude/skills/` | `.claude/skills/` | `/preparedness-alert-warning-templates` or just ask |
+| GitHub Copilot (CLI, VS Code) | `~/.copilot/skills/` or `~/.agents/skills/` | `.github/skills/`, `.claude/skills/` or `.agents/skills/` | `/preparedness-alert-warning-templates` or just ask |
+| Gemini CLI | `~/.gemini/skills/` or `~/.agents/skills/` | `.gemini/skills/` or `.agents/skills/` | just ask; `/skills list` to check |
+| OpenAI Codex (CLI, IDE) and ChatGPT desktop | `~/.agents/skills/` | `.agents/skills/` | `$preparedness-alert-warning-templates` or `@` in ChatGPT |
+
+A single `.agents/skills/` folder in a project is read by Copilot, Gemini CLI
+and Codex at once.
 
 ## Install
 
-### Claude.ai
-
-1. Download the latest skill zip from [Releases](../../releases), or zip the
-   skill folder yourself with `SKILL.md` at its top level.
-2. In Claude.ai open **Settings > Capabilities > Skills > Upload skill** and
-   upload the zip.
-3. Start a chat and ask, for example, "Help me write a WEA template for a boil
-   water advisory."
-
-### Claude Code
-
-Copy the skill folder into `~/.claude/skills/` (personal) or your project's
-`.claude/skills/` (shared with the repo):
+### The quick way (any tool)
 
 ```bash
-git clone https://github.com/preppr-ai/preppr-skills.git
-cp -r preppr-skills/skills/preparedness-alert-warning-templates ~/.claude/skills/
+git clone https://github.com/Preppr-ai/preppr-skills.git
+cd preppr-skills
+sh skills/install.sh claude      # or copilot, gemini, codex, all
+sh skills/install.sh codex --project   # into ./.agents/skills of the current project
 ```
 
-Then type `/preparedness-alert-warning-templates` or describe the alert you
-need.
+The installer only copies the skill folder to the directory in the table above.
 
-### Claude API
+### Claude
 
-Upload the zipped folder through the `/v1/skills` endpoint and pass the
-returned skill id in `container.skills` on your Messages request. See the
-[Agent Skills overview](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview).
-
-### ChatGPT (Custom GPT)
-
-1. Create a Custom GPT and open **Configure**.
-2. Paste the text below the divider in
-   `skills/preparedness-alert-warning-templates/chatgpt/custom-gpt-instructions.md`
-   into **Instructions**.
-3. Upload `skills/preparedness-alert-warning-templates/references/protocol.json`
-   as a **Knowledge** file.
-4. Add the conversation starter `Start`.
+- **Claude.ai:** zip `skills/preparedness-alert-warning-templates/` (with
+  `SKILL.md` at its top level) or download the zip from
+  [Releases](../../releases), then open **Settings > Capabilities > Skills >
+  Upload skill**. Start a chat and ask, for example, "Help me write a WEA
+  template for a boil water advisory."
+- **Claude Code:** `sh skills/install.sh claude`, then type
+  `/preparedness-alert-warning-templates` or describe the alert you need.
+- **Claude API:** upload the zip through `/v1/skills` and pass the returned
+  skill id in `container.skills` on your Messages request. See the
+  [Agent Skills overview](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview).
 
 ### GitHub Copilot
 
-1. Copy the skill folder into your repository so `references/protocol.json` is
-   in the workspace.
-2. Copy `skills/preparedness-alert-warning-templates/copilot/preparedness-alert-warning-templates.agent.md`
-   into `.github/agents/`.
-3. In Copilot Chat, select the `preparedness-alert-warning-templates` agent and
-   type `Start`.
+- **Skill (recommended):** `sh skills/install.sh copilot` for yourself, or
+  `sh skills/install.sh copilot --project` to add it to a repository under
+  `.github/skills/`. Copilot picks it up from your prompt, or type
+  `/preparedness-alert-warning-templates`. Run `/skills list` in Copilot CLI
+  to confirm it was found. See
+  [Adding agent skills for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills).
+- **Custom agent (alternative):** copy
+  `skills/preparedness-alert-warning-templates/copilot/preparedness-alert-warning-templates.agent.md`
+  into `.github/agents/` and keep the skill folder in the repository so the
+  agent can read `references/protocol.json`. Select the agent in Copilot Chat
+  and type `Start`.
+
+### Gemini
+
+- **Gemini CLI:** `gemini skills install https://github.com/Preppr-ai/preppr-skills`
+  installs from this repository, or `sh skills/install.sh gemini` copies the
+  folder into `~/.gemini/skills/`. Then just describe the alert you need;
+  `/skills list` shows what is loaded. See
+  [Gemini CLI Agent Skills](https://geminicli.com/docs/cli/skills).
+- **Gemini app (Gem):** follow
+  `skills/preparedness-alert-warning-templates/gemini/gem-instructions.md`:
+  create a Gem, upload `references/protocol.json` as knowledge, paste the
+  instructions, type `Start`.
+
+### ChatGPT and OpenAI Codex
+
+- **Codex CLI or IDE extension:** `sh skills/install.sh codex`, then type
+  `$preparedness-alert-warning-templates` or run `/skills`. The
+  `agents/openai.yaml` file provides the display name and description. See
+  [Build skills](https://learn.chatgpt.com/docs/build-skills).
+- **ChatGPT desktop app:** install the same way; the skill appears under
+  **Skills** in the sidebar and can be chosen with `@`.
+- **Custom GPT (web, no install):** follow
+  `skills/preparedness-alert-warning-templates/chatgpt/custom-gpt-instructions.md`:
+  create a GPT, upload `references/protocol.json` as knowledge, paste the
+  instructions, add the conversation starter `Start`.
 
 ## What to expect
 
