@@ -1,7 +1,7 @@
 # Preppr Skills
 
 Open, portable AI skills from [Preppr](https://www.preppr.ai) for emergency
-management. Each skill is a folder of instructions that teaches an AI
+management and business continuity. Each skill is a folder of instructions that teaches an AI
 assistant how to run one of Preppr's guided workflows, step by step. They use
 the [Agent Skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview)
 open format, so the same folder works in **Claude**, **GitHub Copilot**,
