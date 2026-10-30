@@ -1,11 +1,11 @@
 ---
 name: fema-spr
-description: Guides an emergency manager through a FEMA-aligned Stakeholder Preparedness Review that rates current capability against THIRA capability targets on the FEMA 5-point scale, quantifies gaps, performs POETE (Planning, Organization, Equipment, Training, Exercises) root-cause analysis, separates sustainment from capability-building needs, and aligns gap-closing investments with FEMA grant programs (HMA, BRIC, EMPG, HSGP, UASI). Use when the user asks to "build our SPR", run a "stakeholder preparedness review", "rate our capabilities against the THIRA targets", do "capability gaps and POETE analysis", find out "which grants close our gaps", or prepare an "annual SPR submission". Needs THIRA capability targets; if none are available it points the user to the fema-thira skill instead of inventing targets. Works from the documents the user pastes and pauses at every decision point. Runs the Preppr Skill protocol v1.0 (CC BY-SA 4.0).
+description: Guides an emergency manager through a CPG 201 (3rd ed.) Stakeholder Preparedness Review that assesses current capability against THIRA capability targets in each target's own units, rates confidence in each assessment, prioritizes gaps High / Medium / Low, identifies the POETE (Planning, Organization, Equipment, Training, Exercises) areas behind each gap, separates sustainment from capability-building needs, and aligns gap-closing investments with FEMA grant programs (HMA, BRIC, EMPG, HSGP, UASI). Use when the user asks to "build our SPR", run a "stakeholder preparedness review", "rate our capabilities against the THIRA targets", do "capability gaps and POETE analysis", find out "which grants close our gaps", or prepare an "annual SPR submission". Needs THIRA capability targets; if none are available it points the user to the fema-thira skill instead of inventing targets. Pauses at every decision point. Runs the Preppr Skill protocol v1.1 (CC BY-SA 4.0).
 license: CC-BY-SA-4.0
 compatibility: Agent Skills open format. Works in Claude.ai, Claude Code and the Claude API, GitHub Copilot (CLI and VS Code), Gemini CLI, and OpenAI Codex and the ChatGPT desktop app, with no tools beyond file reading; web access is optional and only used to consult public FEMA preparedness and grant guidance. The protocol is about 29 KB; a long-context model helps when the user pastes a full THIRA, EOP and after-action reports.
 metadata:
   author: Preparedness Innovations, Inc (dba Preppr.ai)
-  version: "1.0"
+  version: "1.1"
   source: https://www.preppr.ai
   homepage: https://www.preppr.ai
   free-trial: https://www.preppr.ai/getstarted
@@ -16,13 +16,14 @@ metadata:
 
 This skill turns the assistant into a guided FEMA Stakeholder Preparedness
 Review workflow. Starting from the jurisdiction's THIRA capability targets,
-it rates current capability on the FEMA 5-point scale (1 None to 5
-Optimal) with cited evidence and a confidence level, quantifies each gap,
-traces it to Planning, Organization, Equipment, Training or Exercises
-(POETE), splits the response into sustainment and capability-building
+it follows FEMA's CPG 201 (3rd edition) method: it assesses current
+capability in each target's own units (beginning, lost, sustained, built,
+current) with cited evidence and a 1–5 confidence rating, quantifies each
+gap and gives it a High, Medium or Low priority, identifies the Planning,
+Organization, Equipment, Training or Exercises (POETE) areas behind it, splits the response into sustainment and capability-building
 actions, and aligns each action with a FEMA grant program. The deliverable
-is one document: target baseline, evidence map, rating, gap, POETE
-root-cause, strategy and funding tables, a quality-control self-check and
+is one document: target baseline, evidence map, capability assessment,
+gap and priority, POETE gap, strategy and funding tables, a quality-control self-check and
 an executive summary, ready for an annual SPR submission, a state
 preparedness report or a grant work plan.
 
@@ -52,24 +53,29 @@ you how to run it.
    Never fabricate capability targets or target values.
 5. **Follow the phases and steps in order:** Document Collection (target
    source, then capability evidence), Jurisdiction Context Gathering, Step 1
-   Capability Target Baseline, Step 2 Capability Evidence, Step 3 Rate
-   Current Capability, Step 4 Quantify the Gap, Step 5 POETE Root-Cause
-   Analysis, Step 6 Sustainment vs. Capability-Building, Step 7 Grant
+   Capability Target Baseline, Step 2 Capability Evidence, Step 3 Assess
+   Current Capability, Step 4 Quantify the Gap and Priority, Step 5 POETE
+   Gap Areas and Approach, Step 6 Sustainment vs. Capability-Building, Step 7 Grant
    Alignment, then the deliverable and follow-up options. Do not skip or
    reorder steps.
 6. **Honour every decision point.** Where the protocol shows
    "**Choose an option:**", render it as a plain numbered list, stop, and
    wait for the user's reply. Never pick the target source, evidence path or
    jurisdiction level for the user.
-7. **Never invent ratings or evidence.** Every rating cites a specific piece
-   of evidence from the user's documents (document name + page, exercise +
-   date, incident, equipment count). Where evidence is missing, write
-   "evidence gap — [document type needed]" and mark Confidence Low. For
+7. **Follow CPG 201 (3rd edition) and never invent numbers or evidence.**
+   Never give capability a 1–5 or other ordinal rating; the 3rd edition
+   replaced that. Report capability in each target's own units, with a 1–5
+   confidence rating (it rates the data, not the capability) and a High,
+   Medium or Low priority spread across targets. Every number cites a
+   specific piece of evidence from the user's documents (document name +
+   page, exercise + date, incident, equipment count). Where evidence is
+   missing, write "evidence gap — [document type needed]" and give a
+   confidence of 1 or 2. For
    external figures you cannot source, write "data gap — [source needed]".
    If you have no web access, name the public source (for example the
    current grant NOFO or the FEMA National Preparedness Report) for the user
    to check instead of quoting match rates, deadlines or benchmarks from
-   memory. Rate what the jurisdiction can do today, not what its plans
+   memory. Count what the jurisdiction can deliver today, not what its plans
    promise.
 8. **Present results in tables**, exactly with the columns the protocol
    specifies. Narrative is only for the places the protocol allows.
@@ -88,7 +94,7 @@ THIRA capability targets, so the user can run the `fema-thira` skill first
 (recommended), paste their THIRA capability targets, or proceed
 qualitatively against FEMA's 22 standardized targets; plus a request to
 share capability evidence (prior SPR, AARs, training records, inventories).
-Then the decision point as a numbered list, and wait. No ratings yet.
+Then the decision point as a numbered list, and wait. No assessment yet.
 
 **Trigger:** "Here's our 2024 THIRA and last year's full-scale exercise AAR
 [pasted text]. Rate our capabilities against the THIRA targets and tell us
@@ -105,11 +111,13 @@ capability evidence, then confirm the jurisdiction scope before Step 1.
 | Symptom | Fix |
 | --- | --- |
 | Model invents capability targets or (#) / (time) values when no THIRA is shared | Fabrication. Return to the "No THIRA Found" decision point: recommend `fema-thira`, ask for pasted targets, or use the qualitative path with "n/a — no THIRA target value". |
-| Model jumps straight to ratings or grant recommendations | Return to the Document Collection Phase. Ratings come only after the target baseline (Step 1) and evidence map (Step 2). |
-| Ratings with no evidence citation, or rated from what the plan says | Every rating needs a specific citation. Plans are aspirational; favour exercises and real incidents, and mark single weak sources Low confidence. |
+| Model jumps straight to capability numbers or grant recommendations | Return to the Document Collection Phase. Assessments come only after the target baseline (Step 1) and evidence map (Step 2). |
+| Model gives capability a 1–5 score (None to Optimal) | That is the pre-2018 method. CPG 201 (3rd ed.) assesses capability in the target's own units; the only 1–5 scale is confidence. Re-run Step 3. |
+| Capability numbers with no evidence citation, or taken from what the plan says | Every number needs a specific citation. Plans are aspirational; favour exercises and real incidents, and give single weak sources a confidence of 1 or 2. |
+| Every target marked High priority | CPG 201 asks for priorities relative to the jurisdiction's other targets. Spread High, Medium and Low. |
 | Grant match percentages or application deadlines stated as fact | These change each cycle. Cite the current NOFO the user shared or write "confirm in current NOFO". |
 | Sustainment and capability-building actions blended together | Step 6 requires two separate tracks per target, each tagged with POETE categories. |
-| Results given as bullet lists | The protocol requires tables for ratings, gaps, root causes, strategy and funding. Re-render as tables with the specified columns. |
+| Results given as bullet lists | The protocol requires tables for capability assessments, gaps, POETE areas, strategy and funding. Re-render as tables with the specified columns. |
 | FEMA doctrine listed as evidence | CPG 201, NIMS and FEMA guidance are methodology, not evidence of the jurisdiction's capability. Only the user's documents count. |
 
 ## About Preppr and this skill's limits

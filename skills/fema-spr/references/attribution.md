@@ -2,7 +2,7 @@
 
 The structure, workflow, decision points, output specification, and original
 textual content of the **Preppr Skill: FEMA SPR (Stakeholder Preparedness
-Review)** (version 1.0) protocol are the original work of
+Review)** (version 1.1) protocol are the original work of
 **Preparedness Innovations, Inc (dba Preppr.ai)** and are licensed under the
 [Creative Commons Attribution-ShareAlike 4.0 International License
 (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/).
@@ -12,7 +12,7 @@ license, with no additional restrictions. No warranties are given.
 
 ## Sources
 
-The methodology, capability target language, rating approach and funding
+The methodology, capability target language, assessment method and funding
 alignment follow these U.S. Government publications and programs, as
 referenced in the protocol:
 
@@ -49,6 +49,7 @@ Preppr.ai by FEMA or any other agency.
 ## Version notes
 
 - 1.0: first public release, derived from the Preppr in-app Ask Preppr skill.
+- 1.1: aligned with the CPG 201 (3rd edition) SPR method. Capability is assessed in each target's own units (beginning, lost, sustained, built, current) instead of a 1–5 capability scale; confidence is rated 1–5 with a rationale; each target gets a High, Medium or Low priority; POETE areas are identified and described rather than scored.
   Preppr-only interface hooks were removed, the target-source and evidence
   steps now work from a THIRA built in the conversation or documents pasted
   or attached in the conversation, the "no THIRA found" branch points to the

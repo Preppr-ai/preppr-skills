@@ -3,7 +3,7 @@
 # The skill itself is SKILL.md; this file only shapes how it is presented.
 interface:
   display_name: "FEMA SPR (Stakeholder Preparedness Review)"
-  short_description: "Rate capability against THIRA targets, find gaps, trace POETE root causes and align fixes with FEMA grants."
+  short_description: "Assess capability against THIRA targets the CPG 201 way, prioritize gaps, find POETE shortfalls and align fixes with FEMA grants."
   brand_color: "#203554"
   default_prompt: "Use $fema-spr to build our Stakeholder Preparedness Review against our THIRA capability targets."
 

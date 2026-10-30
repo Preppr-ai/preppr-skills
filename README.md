@@ -21,7 +21,7 @@ gap instead of inventing it.
 | [`skills/preparedness-alert-warning-templates/`](skills/preparedness-alert-warning-templates/) | Nine-phase guided workflow that produces a per-platform table of alert templates, plus UPDATE and THREAT HAS PASSED follow-ups. |
 | [`skills/fema-risk-assessment/`](skills/fema-risk-assessment/) | FEMA IS-393 / 386-2 four-step risk assessment: hazard profiles, asset inventory, loss estimates and a composite risk ranking for an HMP, EOP or THIRA. |
 | [`skills/fema-thira/`](skills/fema-thira/) | CPG 201 three-step THIRA: threats and hazards of concern, standardized impacts, and capability targets ready for a community THIRA submission. |
-| [`skills/fema-spr/`](skills/fema-spr/) | Stakeholder Preparedness Review: rates current capability against THIRA targets, POETE root causes, sustainment vs. building needs, and grant alignment. |
+| [`skills/fema-spr/`](skills/fema-spr/) | Stakeholder Preparedness Review using the CPG 201 (3rd edition) method: capability in each target's own units, confidence, prioritized gaps, POETE shortfalls and grant alignment. |
 | [`skills/fema-hazard-mitigation-plan/`](skills/fema-hazard-mitigation-plan/) | Hazard Mitigation Plan builder under 44 CFR 201.6: goals and objectives, mitigation actions in the six FEMA categories, implementation strategy, planning-process record. |
 | [`skills/cpg-101-plan-evaluation/`](skills/cpg-101-plan-evaluation/) | Evaluates an Emergency Operations Plan against CPG 101: compliance gaps, missing elements and improvements, with citations. |
 
