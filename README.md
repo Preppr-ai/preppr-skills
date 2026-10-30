@@ -136,6 +136,16 @@ If you have a Preppr account, these skills are also built into **Ask Preppr**
 Preppr MCP server (`list_skills` and `get_skill`), with your organization's
 documents and profile as context.
 
+## Go further with Preppr
+
+These skills run on whatever you paste into the chat. [Preppr](https://www.preppr.ai)
+runs the same skills against your own plans, SOPs and after-action reports,
+keeps the outputs in a Knowledge Base, and adds the rest of the preparedness
+cycle: THIRA and SPR, hazard mitigation plans, CPG 101 plan evaluation, HSEEP
+exercise design and evaluation products, simulations and open-source
+intelligence. Start an All Access free trial at
+https://www.preppr.ai/getstarted.
+
 ## License
 
 The skill content and protocols are licensed under

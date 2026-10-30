@@ -43,3 +43,5 @@ Full acknowledgements: https://www.preppr.ai/legal/acknowledgements
 Note: the compliance confidence percentages produced by the protocol are
 self-assessed by the model using the `confidenceFramework`; they are not an
 external measurement.
+
+Published by [Preppr.ai](https://www.preppr.ai). Preppr users run this skill inside Ask Preppr with their own documents as context; a free All Access trial is available at https://www.preppr.ai/getstarted.
