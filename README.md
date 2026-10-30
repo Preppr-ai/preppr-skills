@@ -7,13 +7,12 @@ the [Agent Skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills
 open format, so the same folder works in **Claude**, **GitHub Copilot**,
 **Gemini** and **ChatGPT / Codex**. No Preppr account is needed.
 
-The first skill, **Preparedness Alert & Warning Templates**, lets an emergency
-manager pre-script a library of compliant public alert templates for IPAWS and
-Wireless Emergency Alerts (90 and 360 characters), mass-notification text, email
-and voice, X, and other social media. It covers Imminent Threat, Public Safety,
-AMBER, Missing Person and Developing Situation alerts, draws on a
-research-backed Warning Lexicon, and runs a confidence-scored compliance check
-before anything is generated.
+There are six skills today. One pre-scripts public alert and warning templates.
+Five walk through FEMA planning and assessment work: a risk assessment, a
+THIRA, an SPR, a hazard mitigation plan, and a CPG 101 review of an Emergency
+Operations Plan. Each one follows a step-by-step protocol, works from the
+documents you paste in, pauses for your decisions, and marks missing data as a
+gap instead of inventing it.
 
 ## Skills
 
@@ -33,8 +32,7 @@ and accepts a pasted document instead.
 Each skill folder contains:
 
 - `SKILL.md` - the skill (YAML frontmatter plus instructions); this is what every tool reads
-- `references/protocol.json` - the full protocol the assistant follows
-- `references/attribution.md` - license, third-party citations and version notes
+- `references/` - the protocol the assistant follows (`protocol.json` for the alert skill, `protocol.md` for the others) and `attribution.md` with license, sources and version notes
 - `agents/openai.yaml` - optional display metadata for Codex and ChatGPT
 - `chatgpt/custom-gpt-instructions.md` - for a ChatGPT Custom GPT (no Codex needed)
 - `gemini/gem-instructions.md` - for a Gemini Gem in the Gemini app
@@ -66,78 +64,85 @@ sh skills/install.sh all fema-thira               # any skill folder name; defau
 
 The installer only copies the skill folder to the directory in the table above.
 
+The examples below use `fema-thira`; swap in any skill folder name.
+
 ### Claude
 
-- **Claude.ai:** zip `skills/preparedness-alert-warning-templates/` (with
-  `SKILL.md` at its top level) or download the zip from
-  [Releases](../../releases), then open **Settings > Capabilities > Skills >
-  Upload skill**. Start a chat and ask, for example, "Help me write a WEA
-  template for a boil water advisory."
-- **Claude Code:** `sh skills/install.sh claude`, then type
-  `/preparedness-alert-warning-templates` or describe the alert you need.
+- **Claude.ai:** zip a skill folder, for example `skills/fema-thira/` with
+  `SKILL.md` at its top level, or download its zip from
+  [Releases](../../releases). Then open **Settings > Capabilities > Skills >
+  Upload skill**. Start a chat and describe the work, for example "Help me
+  build our THIRA."
+- **Claude Code:** `sh skills/install.sh claude fema-thira`, then type
+  `/fema-thira` or describe what you need.
 - **Claude API:** upload the zip through `/v1/skills` and pass the returned
   skill id in `container.skills` on your Messages request. See the
   [Agent Skills overview](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview).
 
 ### GitHub Copilot
 
-- **Skill (recommended):** `sh skills/install.sh copilot` for yourself, or
-  `sh skills/install.sh copilot --project` to add it to a repository under
+- **Skill (recommended):** `sh skills/install.sh copilot fema-thira` for
+  yourself, or add `--project` to put it in a repository under
   `.github/skills/`. Copilot picks it up from your prompt, or type
-  `/preparedness-alert-warning-templates`. Run `/skills list` in Copilot CLI
-  to confirm it was found. See
-  [Adding agent skills for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills).
-- **Custom agent (alternative):** copy
-  `skills/preparedness-alert-warning-templates/copilot/preparedness-alert-warning-templates.agent.md`
-  into `.github/agents/` and keep the skill folder in the repository so the
-  agent can read `references/protocol.json`. Select the agent in Copilot Chat
-  and type `Start`.
+  `/fema-thira`. Run `/skills list` in Copilot CLI to confirm it was found.
+  See [Adding agent skills for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills).
+- **Custom agent (alternative):** copy the skill's `copilot/*.agent.md` into
+  `.github/agents/` and keep the skill folder in the repository so the agent
+  can read its `references/`. Select the agent in Copilot Chat and type
+  `Start`.
 
 ### Gemini
 
 - **Gemini CLI:** `gemini skills install https://github.com/Preppr-ai/preppr-skills`
-  installs from this repository, or `sh skills/install.sh gemini` copies the
-  folder into `~/.gemini/skills/`. Then just describe the alert you need;
+  installs from this repository, or `sh skills/install.sh gemini fema-thira`
+  copies one folder into `~/.gemini/skills/`. Then describe what you need;
   `/skills list` shows what is loaded. See
   [Gemini CLI Agent Skills](https://geminicli.com/docs/cli/skills).
-- **Gemini app (Gem):** follow
-  `skills/preparedness-alert-warning-templates/gemini/gem-instructions.md`:
-  create a Gem, upload `references/protocol.json` as knowledge, paste the
-  instructions, type `Start`.
+- **Gemini app (Gem):** follow the skill's `gemini/gem-instructions.md`:
+  create a Gem, upload the file in `references/` it names as knowledge, paste
+  the instructions, type `Start`.
 
 ### ChatGPT and OpenAI Codex
 
-- **Codex CLI or IDE extension:** `sh skills/install.sh codex`, then type
-  `$preparedness-alert-warning-templates` or run `/skills`. The
-  `agents/openai.yaml` file provides the display name and description. See
+- **Codex CLI or IDE extension:** `sh skills/install.sh codex fema-thira`,
+  then type `$fema-thira` or run `/skills`. Each skill's `agents/openai.yaml`
+  provides its display name and description. See
   [Build skills](https://learn.chatgpt.com/docs/build-skills).
 - **ChatGPT desktop app:** install the same way; the skill appears under
   **Skills** in the sidebar and can be chosen with `@`.
-- **Custom GPT (web, no install):** follow
-  `skills/preparedness-alert-warning-templates/chatgpt/custom-gpt-instructions.md`:
-  create a GPT, upload `references/protocol.json` as knowledge, paste the
-  instructions, add the conversation starter `Start`.
+- **Custom GPT (web, no install):** follow the skill's
+  `chatgpt/custom-gpt-instructions.md`: create a GPT, upload the file in
+  `references/` it names as knowledge, paste the instructions, add the
+  conversation starter `Start`.
 
 ## What to expect
 
-> **You:** Pre-script an emergency alert for a chemical release at the rail
-> yard on the east side of town.
->
-> **Assistant:** Phase 1 of 9: Onboarding | Step 1 of 2 ... To continue,
-> please type 'I AGREE' ...
+Every skill starts by asking for the documents it needs, then works through its
+protocol one step at a time, stopping at each decision point for your answer.
+It delivers one continuous document you can copy into your own plan or
+submission, and suggests the sibling skill to run next where one applies.
 
-The assistant walks through platform selection, languages and audiences, alert
-type, information collection, a compliance check, and then delivers a table
-with one row per platform you selected, each with a self-assessed compliance
-confidence and notes. It then offers UPDATE and THREAT HAS PASSED follow-up
-templates.
+| Ask your assistant | Skill that runs | You get |
+| --- | --- | --- |
+| "Pre-script an emergency alert for a chemical release at the rail yard." | `preparedness-alert-warning-templates` | A table of alert templates for each platform you use, plus UPDATE and THREAT HAS PASSED follow-ups. |
+| "Run a FEMA risk assessment for our county." | `fema-risk-assessment` | Hazard profiles, an asset inventory, loss estimates and a composite risk ranking. |
+| "Build our THIRA." | `fema-thira` | Threat and hazard scenarios, standardized impacts and capability targets. |
+| "Rate our capabilities against the THIRA targets." | `fema-spr` | Capability gaps by POETE area, sustainment vs. building needs and grant alignment. |
+| "Update our hazard mitigation plan." | `fema-hazard-mitigation-plan` | Goals and objectives, mitigation actions, an implementation strategy and a planning-process record. |
+| "Does our EOP meet CPG 101?" | `cpg-101-plan-evaluation` | Compliance findings with citations, priority recommendations and an implementation roadmap. |
 
-A long-context reasoning model (200,000 tokens or more) is recommended. The
-protocol itself is about 43,000 tokens.
+The skills chain the way the FEMA process does: the risk assessment feeds the
+hazard mitigation plan, and the THIRA feeds the SPR. If you already have the
+earlier document, paste it instead of running the earlier skill.
 
-All generated templates must be reviewed and approved by a qualified alerting
-official before use. Confidence percentages are self-assessed by the model and
-are a relative quality signal, not a measurement.
+Use a long-context reasoning model. The alert protocol alone is about 43,000
+tokens, and full plans and annexes add up quickly; for long plans, share the
+basic plan first and then one annex at a time.
+
+Everything a skill produces is a draft. Alert templates must be approved by a
+qualified alerting official, and plans and assessments by the responsible
+planner, before use. Any confidence or priority ratings the model gives are
+its own judgment, not a measurement.
 
 ## Preppr users
 
