@@ -15,17 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate SKILL.md frontmatter and protocol JSON
+      - name: Validate skills
         run: |
-          set -e
-          for d in skills/*/; do
-            name=$(basename "$d")
-            test -f "$d/SKILL.md"
-            grep -q "^name: $name$" "$d/SKILL.md"
-            if [ -f "$d/references/protocol.json" ]; then
-              python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$d/references/protocol.json"
-            fi
-          done
+          pip install --quiet pyyaml
+          python3 scripts/validate-skills.py
       - name: Build zips
         run: |
           mkdir -p dist

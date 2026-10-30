@@ -1,0 +1,12 @@
+# Optional metadata read by OpenAI Codex and ChatGPT when this folder is
+# installed as a skill (see https://learn.chatgpt.com/docs/build-skills).
+# The skill itself is SKILL.md; this file only shapes how it is presented.
+interface:
+  display_name: "FEMA THIRA (Threat and Hazard Identification and Risk Assessment)"
+  short_description: "CPG 201 three-step THIRA: threats and hazards of concern, standardized impacts, and capability targets."
+  brand_color: "#203554"
+  default_prompt: "Use $fema-thira to build our THIRA."
+
+policy:
+  # Let Codex/ChatGPT pick this skill from the description, not only on $mention.
+  allow_implicit_invocation: true

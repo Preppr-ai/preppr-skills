@@ -1,0 +1,12 @@
+# Optional metadata read by OpenAI Codex and ChatGPT when this folder is
+# installed as a skill (see https://learn.chatgpt.com/docs/build-skills).
+# The skill itself is SKILL.md; this file only shapes how it is presented.
+interface:
+  display_name: "Evaluate a Plan Against CPG 101 Standards"
+  short_description: "Check an Emergency Operations Plan against FEMA CPG 101 and get cited gaps and prioritized fixes."
+  brand_color: "#203554"
+  default_prompt: "Use $cpg-101-plan-evaluation to evaluate our Emergency Operations Plan against CPG 101."
+
+policy:
+  # Let Codex/ChatGPT pick this skill from the description, not only on $mention.
+  allow_implicit_invocation: true
